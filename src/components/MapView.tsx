@@ -3,7 +3,7 @@ import Map, { Marker, MapRef } from "react-map-gl/mapbox";
 import { AREAS } from "@/data/areas";
 import { useVibeStore } from "@/stores/vibeStore";
 
-const MAPBOX_TOKEN = "pk.eyJ1IjoibG92YWJsZS1kZW1vIiwiYSI6ImNtOWF2YTVjNzBhbHgya3B3cHdqZWVqZnIifQ.placeholder";
+const MAPBOX_TOKEN = "MAPBOX_TOKEN_REMOVED";
 
 export function MapView() {
   const mapRef = useRef<MapRef>(null);

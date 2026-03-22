@@ -1,5 +1,5 @@
 import { useCallback, useRef } from "react";
-import Map, { Marker, MapRef } from "react-map-gl";
+import Map, { Marker, MapRef } from "react-map-gl/mapbox";
 import { AREAS } from "@/data/areas";
 import { useVibeStore } from "@/stores/vibeStore";
 

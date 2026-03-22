@@ -1,13 +1,13 @@
 import { useCallback, useRef } from "react";
 import Map, { Marker, MapRef } from "react-map-gl/mapbox";
-import { AREAS } from "@/data/areas";
+import { AREAS, TAGS } from "@/data/areas";
 import { useVibeStore } from "@/stores/vibeStore";
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 export function MapView() {
   const mapRef = useRef<MapRef>(null);
-  const { selectArea, selectedAreaId, vibes } = useVibeStore();
+  const { selectArea, selectedAreaId, vibes, activeFilters } = useVibeStore();
 
   const handleMarkerClick = useCallback(
     (areaId: string, lat: number, lng: number) => {
@@ -21,14 +21,27 @@ export function MapView() {
     [selectArea]
   );
 
+  // Filter vibes based on active tags
+  const filteredVibes = vibes.filter((v) => {
+    if (v.reported) return false;
+    if (activeFilters.length === 0) return true;
+    return v.tags.some((tag) => activeFilters.includes(tag));
+  });
+
   // Count vibes per area for marker sizing
   const vibeCounts: Record<string, number> = {};
-  vibes.forEach((v) => {
-    if (!v.reported) vibeCounts[v.areaId] = (vibeCounts[v.areaId] || 0) + 1;
+  filteredVibes.forEach((v) => {
+    vibeCounts[v.areaId] = (vibeCounts[v.areaId] || 0) + 1;
+  });
+
+  // Filter areas to show only those with vibes matching the filter (or all if no filter)
+  const visibleAreas = AREAS.filter((area) => {
+    if (activeFilters.length === 0) return true;
+    return vibeCounts[area.id] > 0;
   });
 
   return (
-    <div className="h-full w-full">
+    <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
       <Map
         ref={mapRef}
         initialViewState={{
@@ -47,10 +60,28 @@ export function MapView() {
         maxZoom={16}
         attributionControl={false}
       >
-        {AREAS.map((area) => {
+        {visibleAreas.map((area) => {
           const count = vibeCounts[area.id] || 0;
           const isSelected = selectedAreaId === area.id;
           const size = Math.min(52, 32 + count * 2);
+
+          const areaVibes = filteredVibes.filter((v) => v.areaId === area.id);
+          const areaTagCounts: Record<string, number> = {};
+          areaVibes.forEach((v) => v.tags.forEach((t) => {
+            if (activeFilters.length === 0 || activeFilters.includes(t)) {
+              areaTagCounts[t] = (areaTagCounts[t] || 0) + 1;
+            }
+          }));
+
+          let dominantTagEmoji = "";
+          if (Object.keys(areaTagCounts).length > 0) {
+            const sortedTags = Object.entries(areaTagCounts).sort(([, countA], [, countB]) => countB - countA);
+            const dominantTagId = sortedTags[0][0];
+            const dominantTag = TAGS.find((t) => t.id === dominantTagId);
+            if (dominantTag) {
+              dominantTagEmoji = dominantTag.emoji;
+            }
+          }
 
           return (
             <Marker
@@ -91,7 +122,7 @@ export function MapView() {
                     color: "hsl(0, 0%, 7%)",
                   }}
                 >
-                  {count > 0 ? count : "•"}
+                  {dominantTagEmoji || (count > 0 ? count : "•")}
                 </span>
                 {/* Label */}
                 <span className="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-accent px-1.5 py-0.5 text-[10px] font-semibold text-accent-foreground opacity-0 shadow-sm transition-opacity group-hover:opacity-100">

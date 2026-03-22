@@ -1,13 +1,20 @@
+import { useState } from "react";
 import { AREAS, TAGS, TagId } from "@/data/areas";
 import { useVibeStore } from "@/stores/vibeStore";
+import { useBrutalTruthStore } from "@/stores/brutalTruthStore";
 import { VibeCard } from "./VibeCard";
 import { AddVibeForm } from "./AddVibeForm";
+import { BrutalTruthCard } from "./BrutalTruthCard";
+import { AddBrutalTruthForm } from "./AddBrutalTruthForm";
 import { X } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function AreaPanel() {
   const { selectedAreaId, selectArea, getVibesForArea } = useVibeStore();
+  const { getBrutalTruthsForArea } = useBrutalTruthStore();
   const isMobile = useIsMobile();
+  const [activeTab, setActiveTab] = useState("vibes");
 
   if (!selectedAreaId) return null;
 
@@ -15,6 +22,7 @@ export function AreaPanel() {
   if (!area) return null;
 
   const vibes = getVibesForArea(selectedAreaId);
+  const brutalTruths = getBrutalTruthsForArea(selectedAreaId);
 
   // Tag distribution
   const tagCounts: Record<string, number> = {};
@@ -54,6 +62,16 @@ export function AreaPanel() {
                 {area.name}
               </h2>
               <p className="mt-0.5 text-sm text-muted-foreground">{area.description}</p>
+              {area.expectation && (
+                <p className="mt-2 text-xs text-muted-foreground">
+                  <span className="font-semibold">Expectation:</span> {area.expectation}
+                </p>
+              )}
+              {area.reality && (
+                <p className="mt-1 text-xs text-muted-foreground">
+                  <span className="font-semibold">Reality:</span> {area.reality}
+                </p>
+              )}
             </div>
             <button
               onClick={() => selectArea(null)}
@@ -63,43 +81,75 @@ export function AreaPanel() {
             </button>
           </div>
 
-          {/* Top tags */}
-          {topTags.length > 0 && (
-            <div className="flex gap-2 border-b border-border px-5 py-3">
-              {topTags.map((tagId) => {
-                const tag = TAGS.find((t) => t.id === tagId);
-                return tag ? (
-                  <span
-                    key={tagId}
-                    className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-foreground"
-                  >
-                    {tag.emoji} {tag.label}
-                    <span className="text-muted-foreground">({tagCounts[tagId]})</span>
-                  </span>
-                ) : null;
-              })}
-            </div>
-          )}
+          {/* Tabs for Vibes and Brutal Truths */}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col flex-1">
+            <TabsList className="grid w-full grid-cols-2 rounded-none border-b border-border bg-transparent p-0">
+              <TabsTrigger value="vibes" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none">Vibes</TabsTrigger>
+              <TabsTrigger value="brutal-truths" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none">Brutal Truths</TabsTrigger>
+            </TabsList>
 
-          {/* Vibes list */}
-          <div className="flex-1 overflow-y-auto px-5 py-4">
-            <div className="space-y-3">
-              {vibes.slice(0, 10).map((vibe) => (
-                <VibeCard key={vibe.id} vibe={vibe} />
-              ))}
-              {vibes.length === 0 && (
-                <div className="py-8 text-center">
-                  <p className="text-lg font-semibold text-foreground">No vibes yet 🫥</p>
-                  <p className="mt-1 text-sm text-muted-foreground">Be the first to drop one!</p>
+            <TabsContent value="vibes" className="flex flex-col flex-1 overflow-hidden mt-0">
+              {/* Top tags */}
+              {topTags.length > 0 && (
+                <div className="flex gap-2 border-b border-border px-5 py-3">
+                  {topTags.map((tagId) => {
+                    const tag = TAGS.find((t) => t.id === tagId);
+                    return tag ? (
+                      <span
+                        key={tagId}
+                        className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-foreground"
+                      >
+                        {tag.emoji} {tag.label}
+                        <span className="text-muted-foreground">({tagCounts[tagId]})</span>
+                      </span>
+                    ) : null;
+                  })}
                 </div>
               )}
-            </div>
-          </div>
 
-          {/* Add vibe form */}
-          <div className="border-t border-border px-5 py-4">
-            <AddVibeForm areaId={selectedAreaId} areaName={area.name} />
-          </div>
+              {/* Vibes list */}
+              <div className="flex-1 overflow-y-auto px-5 py-4">
+                <div className="space-y-3">
+                  {vibes.slice(0, 10).map((vibe) => (
+                    <VibeCard key={vibe.id} vibe={vibe} />
+                  ))}
+                  {vibes.length === 0 && (
+                    <div className="py-8 text-center">
+                      <p className="text-lg font-semibold text-foreground">No vibes yet 🫥</p>
+                      <p className="mt-1 text-sm text-muted-foreground">Be the first to drop one!</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Add vibe form */}
+              <div className="border-t border-border px-5 py-4">
+                <AddVibeForm areaId={selectedAreaId} areaName={area.name} />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="brutal-truths" className="flex flex-col flex-1 overflow-hidden mt-0">
+              {/* Brutal Truths list */}
+              <div className="flex-1 overflow-y-auto px-5 py-4">
+                <div className="space-y-3">
+                  {brutalTruths.slice(0, 10).map((truth) => (
+                    <BrutalTruthCard key={truth.id} truth={truth} />
+                  ))}
+                  {brutalTruths.length === 0 && (
+                    <div className="py-8 text-center">
+                      <p className="text-lg font-semibold text-foreground">No brutal truths yet 😇</p>
+                      <p className="mt-1 text-sm text-muted-foreground">Be the first to drop one!</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Add brutal truth form */}
+              <div className="border-t border-border px-5 py-4">
+                <AddBrutalTruthForm areaId={selectedAreaId} areaName={area.name} />
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </>

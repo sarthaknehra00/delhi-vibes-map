@@ -77,14 +77,26 @@ export const useAudioStore = create<AudioState>((set, get) => ({
           globalAudio.src = newTrack.previewUrl;
           globalAudio.volume = get().volume;
           
-          // Play and update state
-          await globalAudio.play();
-          
+          // Update state immediately so player mounts (Optimistic UI)
           set({ 
             currentTrack: newTrack, 
             isPlaying: true,
             isLoading: false 
           });
+
+          // Play audio and gracefully handle AbortError from rapid clicks
+          const playPromise = globalAudio.play();
+          if (playPromise !== undefined) {
+            playPromise.catch((error) => {
+              if (error.name !== 'AbortError') {
+                console.error("Audio playback error:", error);
+              }
+              // Adjust state if playback actually failed (e.g. browser autoplay restrictions)
+              if (globalAudio?.paused) {
+                set({ isPlaying: false });
+              }
+            });
+          }
         } else {
           set({ isLoading: false });
         }

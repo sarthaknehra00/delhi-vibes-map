@@ -5,6 +5,8 @@ import { MapContainer } from "@/components/map/MapContainer";
 import { ControlToolbar } from "@/components/ui-overlays/ControlToolbar";
 import { FoodPanel } from "@/components/ui-overlays/FoodPanel";
 import { VibePlayer } from "@/components/ui-overlays/VibePlayer";
+import { WeatherWidget } from "@/components/ui-overlays/WeatherWidget";
+import { WeatherEffects } from "@/components/ui-overlays/WeatherEffects";
 import { useFoodStore } from "@/stores/foodStore";
 import { MapPin, UserCircle } from "lucide-react";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -22,6 +24,9 @@ export default function Home() {
       
       {/* 3D Mapbox + Deck.gl Engine */}
       <MapContainer />
+      
+      {/* Ambient Weather Overlays (CSS Rain/Thunder/Fog) */}
+      <WeatherEffects />
 
       {/* App Header / Logo */}
       <div className="absolute top-4 left-4 z-50 flex items-center gap-3 bg-[#0a0a0a]/90 backdrop-blur-2xl border border-yellow-500/15 rounded-2xl p-3 px-5 shadow-[0_0_40px_rgba(250,204,21,0.06)]">
@@ -60,6 +65,9 @@ export default function Home() {
           Sign In
         </button>
       </div>
+
+      {/* Global Weather Widget */}
+      <WeatherWidget />
 
       {/* Painting controls centered bottom */}
       <ControlToolbar />

@@ -41,7 +41,7 @@ export const HOTSPOTS: Hotspot[] = [
   { id: 'pasandpur', name: 'Pasandpur', lat: 28.5130, lng: 77.1700, description: 'Deep South Delhi outskirts.', vibeQuery: 'Phir Se Ud Chala' },
 
   // West Delhi
-  { id: 'dwarka', name: 'Dwarka', lat: 28.5823, lng: 77.0500, description: 'Too many sectors, not enough soul. Pacific Mall is the personality.', vibeQuery: 'Champions Seedhe Maut' },
+  { id: 'dwarka', name: 'Dwarka', lat: 28.5823, lng: 77.0500, description: 'Too many sectors, not enough soul. Pacific Mall is the personality.', vibeQuery: 'Namastute Seedhe Maut' },
   { id: 'uttamnagar', name: 'Uttam Nagar', lat: 28.6200, lng: 77.0580, description: 'The most metro-connected place with the least to do near them.', vibeQuery: 'Desi Kalakaar Yo Yo Honey Singh' },
   { id: 'janakpuri', name: 'Janakpuri', lat: 28.6250, lng: 77.0870, description: 'District centre and Unity One mall. Quietly holding West Delhi together.', vibeQuery: 'Excuses AP Dhillon' },
   { id: 'rajouri', name: 'Rajouri Garden', lat: 28.6476, lng: 77.1230, description: 'Foodies paradise and the OG metro hangout spot.', vibeQuery: 'Obsessed Riar Saab' },
@@ -59,11 +59,11 @@ export const HOTSPOTS: Hotspot[] = [
   { id: 'mayurvihar', name: 'Mayur Vihar', lat: 28.6000, lng: 77.2980, description: 'Phase 1, 2, 3 — each one thinks its better than the other.', vibeQuery: 'Gumaan Young Stunners' },
   { id: 'preetvihar', name: 'Preet Vihar', lat: 28.6370, lng: 77.2940, description: 'Metro station famous for nothing. But the market is decent.', vibeQuery: 'Class-Sikh Prabh Deep' },
   { id: 'vivekvihar', name: 'Vivek Vihar', lat: 28.6720, lng: 77.3150, description: 'Phase 1 and 2. Quiet residential with surprise street food gems.', vibeQuery: 'Kho Gaye Hum Kahan' },
-  { id: 'shahdara', name: 'Shahdara', lat: 28.6738, lng: 77.2940, description: 'Old school East Delhi. If you can drive here, you can drive in a war zone.', vibeQuery: 'Nanchaku Seedhe Maut' },
+  { id: 'shahdara', name: 'Shahdara', lat: 28.6738, lng: 77.2940, description: 'Old school East Delhi. If you can drive here, you can drive in a war zone.', vibeQuery: 'Shaktimaan Seedhe Maut' },
   { id: 'ghazipur', name: 'Ghazipur', lat: 28.6230, lng: 77.3260, description: 'Flower market, landfill, and somehow both at once.', vibeQuery: 'Aarambh' },
   { id: 'anandvihar', name: 'Anand Vihar', lat: 28.6480, lng: 77.3160, description: 'ISBT and the gateway to UP. Organised chaos since 1990.', vibeQuery: 'Namastute Seedhe Maut' },
-  { id: 'yamunavihar', name: 'Yamuna Vihar', lat: 28.7020, lng: 77.2680, description: 'North-East Delhi raw energy. Authentic local food territory.', vibeQuery: 'Nanchaku Seedhe Maut' },
-  { id: 'dilshadgarden', name: 'Dilshad Garden', lat: 28.6810, lng: 77.3180, description: 'Underrated and proud of it. Metro made it cool.', vibeQuery: '101 Seedhe Maut' },
+  { id: 'yamunavihar', name: 'Yamuna Vihar', lat: 28.7020, lng: 77.2680, description: 'North-East Delhi raw energy. Authentic local food territory.', vibeQuery: 'Shaktimaan Seedhe Maut' },
+  { id: 'dilshadgarden', name: 'Dilshad Garden', lat: 28.6810, lng: 77.3180, description: 'Underrated and proud of it. Metro made it cool.', vibeQuery: 'Bajenge Seedhe Maut' },
   { id: 'ipext', name: 'IP Extension', lat: 28.6310, lng: 77.3100, description: 'Patparganj vibes. Schools, parks, and middle-class dreams.', vibeQuery: 'Tu Aake Dekhle King' },
   { id: 'musamvihar', name: 'Maujpur', lat: 28.6880, lng: 77.2680, description: 'Northeast Delhi resilience. Street markets and local legends.', vibeQuery: 'Machayenge' },
 

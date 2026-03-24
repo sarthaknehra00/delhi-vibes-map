@@ -6,6 +6,7 @@ import { DeckGL } from '@deck.gl/react';
 import { GeoJsonLayer, TextLayer } from '@deck.gl/layers';
 import { usePaintStore } from '@/stores/paintStore';
 import { useFoodStore } from '@/stores/foodStore';
+import { useWeatherStore, TimeOfDay } from '@/stores/weatherStore';
 import { CATEGORY_MAP } from '@/data/categories';
 import { HOTSPOTS } from '@/data/hotspots';
 import { cellToPolygon, getDominantCategory } from '@/lib/gridUtils';
@@ -24,6 +25,17 @@ export function MapContainer() {
   const mapRef = useRef<MapRef>(null);
   const { cells, version, drawMode, activeTool, isDrawing, startDrawing, stopDrawing, paintAt, eraseAt } = usePaintStore();
   const { setSelectedHotspot } = useFoodStore();
+  const { timeOfDay } = useWeatherStore();
+
+  const getMapStyle = (time: TimeOfDay) => {
+    switch(time) {
+      case 'morning':
+      case 'afternoon': return 'mapbox://styles/mapbox/light-v11';
+      case 'evening': return 'mapbox://styles/mapbox/navigation-night-v1';
+      case 'night': return 'mapbox://styles/mapbox/dark-v11';
+      default: return 'mapbox://styles/mapbox/dark-v11';
+    }
+  };
 
   // Convert cells map to GeoJSON for Deck.gl
   const geoJsonData = useMemo(() => {
@@ -136,7 +148,7 @@ export function MapContainer() {
       >
         <Map
           ref={mapRef}
-          mapStyle="mapbox://styles/mapbox/dark-v11"
+          mapStyle={getMapStyle(timeOfDay)}
           mapboxAccessToken={MAPBOX_TOKEN}
           reuseMaps
         />

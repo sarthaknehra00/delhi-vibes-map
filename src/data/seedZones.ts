@@ -17,7 +17,10 @@ export const SEED_ZONES: SeedZone[] = [
   { lat: 28.4550, lng: 77.0980, radius: 5, category: 'rich' }, // Golf Course Road, Gurgaon
   { lat: 28.5420, lng: 77.2020, radius: 3, category: 'rich' }, // Hauz Khas Enclave
   { lat: 28.5550, lng: 77.2650, radius: 4, category: 'rich' }, // New Friends Colony
-  { lat: 28.6480, lng: 77.3160, radius: 5, category: 'rich' }, // Anand Vihar (Requested directly by user)
+  { lat: 28.6480, lng: 77.3160, radius: 4, category: 'rich' }, // Anand Vihar (Requested directly by user)
+  { lat: 28.6475, lng: 77.3023, radius: 4, category: 'rich' }, // Karkardooma (Requested directly by user)
+  { lat: 28.6657, lng: 77.3150, radius: 3, category: 'rich' }, // Vivek Vihar
+  { lat: 28.6385, lng: 77.2948, radius: 3, category: 'rich' }, // Preet Vihar
 
   // --- CORPORATE SUITS (Indigo) ---
   { lat: 28.4900, lng: 77.0880, radius: 4, category: 'corporate' }, // Cyber City Enclave, DLF Phase 2/3
@@ -31,11 +34,14 @@ export const SEED_ZONES: SeedZone[] = [
   { lat: 28.6476, lng: 77.1230, radius: 5, category: 'middleClass' }, // Rajouri Garden / Punjabi Bagh
   { lat: 28.5820, lng: 77.0500, radius: 7, category: 'middleClass' }, // Dwarka Subcity
   { lat: 28.6970, lng: 77.1350, radius: 6, category: 'middleClass' }, // Pitampura / Rohini Sec 3+
-  { lat: 28.6370, lng: 77.2940, radius: 4, category: 'middleClass' }, // Preet Vihar / Laxmi Nagar (Part)
   { lat: 28.6000, lng: 77.2980, radius: 5, category: 'middleClass' }, // Mayur Vihar Phase 1 & 2
   { lat: 28.5850, lng: 77.0800, radius: 5, category: 'middleClass' }, // Palam (Requested directly by user)
   { lat: 28.6200, lng: 77.0580, radius: 5, category: 'middleClass' }, // Uttam Nagar
   { lat: 28.6738, lng: 77.2940, radius: 4, category: 'middleClass' }, // Shahdara (Requested directly by user)
+  { lat: 28.6415, lng: 77.3394, radius: 4, category: 'middleClass' }, // Vaishali (Requested directly)
+  { lat: 28.6410, lng: 77.3710, radius: 5, category: 'middleClass' }, // Indirapuram
+  { lat: 28.6631, lng: 77.3712, radius: 4, category: 'middleClass' }, // Vasundhara
+  { lat: 28.6290, lng: 77.3060, radius: 3, category: 'middleClass' }, // IP Extension (Patparganj)
 
   // --- POOR / WORKING CLASS (Amber) ---
   { lat: 28.7100, lng: 77.0500, radius: 6, category: 'poor' }, // Najafgarh deeper outskirts
@@ -43,6 +49,9 @@ export const SEED_ZONES: SeedZone[] = [
   { lat: 28.7300, lng: 77.1700, radius: 5, category: 'poor' }, // Jahangirpuri
   { lat: 28.5200, lng: 77.2800, radius: 5, category: 'poor' }, // Tughlakabad Extension / Sangam Vihar
   { lat: 28.6600, lng: 77.3000, radius: 4, category: 'poor' }, // Nand Nagri / Trilokpuri
+  { lat: 28.6050, lng: 77.3080, radius: 4, category: 'poor' }, // Trilokpuri
+  { lat: 28.6180, lng: 77.3180, radius: 4, category: 'poor' }, // Kalyanpuri
+  { lat: 28.6200, lng: 77.3400, radius: 5, category: 'poor' }, // Khoda Colony (Working Class hub)
   
   // --- STUDENTS (Pink) ---
   { lat: 28.6921, lng: 77.2065, radius: 4, category: 'students' }, // North Campus / Hudson Lane

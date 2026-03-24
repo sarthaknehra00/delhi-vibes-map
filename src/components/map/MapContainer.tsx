@@ -65,9 +65,8 @@ export function MapContainer() {
       id: 'paint-cells-layer',
       data: geoJsonData as any,
       pickable: true,
-      stroked: true,
+      stroked: false, // User explicitly requested to remove the "squares" blocking the view
       filled: true,
-      lineWidthMinPixels: 1,
       getFillColor: (d: any) => {
         const cat = CATEGORY_MAP[d.properties.category as keyof typeof CATEGORY_MAP];
         const hex = cat ? cat.color.replace('#', '') : '888888';
@@ -76,8 +75,6 @@ export function MapContainer() {
         const b = parseInt(hex.substring(4, 6), 16);
         return [r, g, b, Math.floor(d.properties.opacity * 255)];
       },
-      getLineColor: [255, 255, 255, 40],
-      getLineWidth: 1,
     }),
     new TextLayer({
       id: 'hotspots-layer',

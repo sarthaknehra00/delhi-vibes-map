@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { SEED_RESTAURANTS } from '@/data/seedRestaurants';
 
 export interface Restaurant {
   id: string;
@@ -23,35 +24,7 @@ interface FoodState {
 export const useFoodStore = create<FoodState>()(
   persist(
     (set, get) => ({
-      restaurants: [
-        {
-          id: '1',
-          name: 'Ramesh Chole Bhature',
-          hotspotId: 'karolbagh',
-          category: 'Street Food',
-          votes: 1240,
-          description: 'Acidity guaranteed, but the taste is therapeutic.',
-          addedBy: 'DelhiBwoy'
-        },
-        {
-          id: '2',
-          name: 'The Aesthetic Cafe',
-          hotspotId: 'hauzkhas',
-          category: 'Cafes',
-          votes: -45,
-          description: 'Lights are imported, coffee is mid. Good for mirror selfies only.',
-          addedBy: 'IndieSoul'
-        },
-        {
-          id: '3',
-          name: 'Kake Di Hatti',
-          hotspotId: 'chandnichowk',
-          category: 'Street Food',
-          votes: 3000,
-          description: 'Naan bigger than your future.',
-          addedBy: 'FoodieKing'
-        },
-      ],
+      restaurants: SEED_RESTAURANTS,
       selectedHotspotId: null,
       setSelectedHotspot: (id) => set({ selectedHotspotId: id }),
       addRestaurant: (res) => set((state) => ({

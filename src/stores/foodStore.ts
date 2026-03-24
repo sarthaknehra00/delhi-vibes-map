@@ -26,7 +26,9 @@ export const useFoodStore = create<FoodState>()(
     (set, get) => ({
       restaurants: SEED_RESTAURANTS,
       selectedHotspotId: null,
+      
       setSelectedHotspot: (id) => set({ selectedHotspotId: id }),
+      
       addRestaurant: (res) => set((state) => ({
         restaurants: [
           ...state.restaurants,
@@ -37,11 +39,13 @@ export const useFoodStore = create<FoodState>()(
           }
         ]
       })),
+
       voteRestaurant: (id, delta) => set((state) => ({
         restaurants: state.restaurants.map((r) =>
           r.id === id ? { ...r, votes: r.votes + delta } : r
         )
       })),
+
       getTop5ForHotspot: (hotspotId) => {
         return get().restaurants
           .filter((r) => r.hotspotId === hotspotId)

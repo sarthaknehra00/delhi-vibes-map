@@ -3,9 +3,11 @@
 import { useRef, useCallback, useMemo } from 'react';
 import Map, { MapRef } from 'react-map-gl/mapbox';
 import { DeckGL } from '@deck.gl/react';
-import { GeoJsonLayer } from '@deck.gl/layers';
+import { GeoJsonLayer, TextLayer } from '@deck.gl/layers';
 import { usePaintStore } from '@/stores/paintStore';
+import { useFoodStore } from '@/stores/foodStore';
 import { CATEGORY_MAP } from '@/data/categories';
+import { HOTSPOTS } from '@/data/hotspots';
 import { cellToPolygon, getDominantCategory } from '@/lib/gridUtils';
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
@@ -21,6 +23,7 @@ const INITIAL_VIEW_STATE = {
 export function MapContainer() {
   const mapRef = useRef<MapRef>(null);
   const { cells, version, drawMode, activeTool, isDrawing, startDrawing, stopDrawing, paintAt, eraseAt } = usePaintStore();
+  const { setSelectedHotspot } = useFoodStore();
 
   // Convert cells map to GeoJSON for Deck.gl
   const geoJsonData = useMemo(() => {
@@ -63,8 +66,35 @@ export function MapContainer() {
       },
       getLineColor: [255, 255, 255, 40],
       getLineWidth: 1,
+    }),
+    new TextLayer({
+      id: 'hotspots-layer',
+      data: HOTSPOTS,
+      pickable: true,
+      getPosition: (d: any) => [d.lng, d.lat],
+      getText: (d: any) => `${d.emoji} ${d.name}`,
+      getSize: 22,
+      getAngle: 0,
+      getTextAnchor: 'middle',
+      getAlignmentBaseline: 'center',
+      getColor: [255, 255, 255],
+      getBackgroundColor: [0, 0, 0, 160],
+      background: true,
+      backgroundPadding: [4, 4],
+      fontWeight: 'bold',
+      fontFamily: 'Inter, sans-serif',
+      outlineWidth: 2,
+      outlineColor: [0, 0, 0],
     })
   ];
+
+  const handleLayerClick = useCallback((info: any) => {
+    if (info.layer?.id === 'hotspots-layer' && info.object) {
+      setSelectedHotspot(info.object.id);
+      return true;
+    }
+    return false;
+  }, [setSelectedHotspot]);
 
   const handleMouseDown = useCallback((info: any, e: any) => {
     if (drawMode === "navigate") return;
@@ -100,7 +130,10 @@ export function MapContainer() {
         onDragStart={handleMouseDown}
         onDrag={handleDrag}
         onDragEnd={handleMouseUp}
-        onClick={handleMouseDown}
+        onClick={(info, event) => {
+          if (handleLayerClick(info)) return;
+          handleMouseDown(info, event);
+        }}
         getCursor={() => drawMode === "navigate" ? "grab" : "crosshair"}
       >
         <Map

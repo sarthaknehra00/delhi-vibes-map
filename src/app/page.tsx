@@ -4,11 +4,17 @@ import { useState } from "react";
 import { MapContainer } from "@/components/map/MapContainer";
 import { ControlToolbar } from "@/components/ui-overlays/ControlToolbar";
 import { FoodPanel } from "@/components/ui-overlays/FoodPanel";
+import { useFoodStore } from "@/stores/foodStore";
 import { MapPin, UserCircle } from "lucide-react";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 export default function Home() {
-  const [isFoodPanelOpen, setIsFoodPanelOpen] = useState(true);
+  const { selectedHotspotId, setSelectedHotspot } = useFoodStore();
+  const isFoodPanelOpen = !!selectedHotspotId;
+
+  const setIsFoodPanelOpen = (open: boolean) => {
+    if (!open) setSelectedHotspot(null);
+  };
 
   return (
     <main className="relative w-screen h-screen overflow-hidden bg-black text-white selection:bg-orange-500/30">
@@ -49,7 +55,7 @@ export default function Home() {
       <ControlToolbar />
 
       {/* Slide-out Food & Vibes Ranking Panel */}
-      <FoodPanel isOpen={isFoodPanelOpen} onClose={() => setIsFoodPanelOpen(false)} areaName="Hauz Khas" />
+      <FoodPanel isOpen={isFoodPanelOpen} onClose={() => setIsFoodPanelOpen(false)} />
 
       {/* Footer warning */}
       <div className="absolute bottom-2 left-4 z-50 text-[10px] text-white/30 font-medium tracking-wide">

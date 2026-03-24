@@ -37,8 +37,25 @@ export const useAudioStore = create<AudioState>((set, get) => ({
 
     try {
       // iTunes Search API is completely free and requires no API key.
-      const response = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&limit=1&entity=song`);
-      const data = await response.json();
+      // Append country=IN to find regional Indian songs.
+      let response = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&limit=1&entity=song&country=IN`);
+      let data = await response.json();
+
+      // Fallback 1: Try searching just the artist or last part of the query to preserve the vibe
+      if (!data.results || data.results.length === 0) {
+        const words = query.split(' ');
+        if (words.length >= 2) {
+          const fallbackQuery = words.slice(-2).join(' ');
+          response = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(fallbackQuery)}&limit=1&entity=song&country=IN`);
+          data = await response.json();
+        }
+      }
+
+      // Fallback 2: Default Delhi Vibe if everything else fails
+      if (!data.results || data.results.length === 0) {
+        response = await fetch(`https://itunes.apple.com/search?term=Delhi+6+Arziyan&limit=1&entity=song&country=IN`);
+        data = await response.json();
+      }
 
       if (data.results && data.results.length > 0) {
         const track = data.results[0];

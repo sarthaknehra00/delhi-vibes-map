@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { MapContainer } from "@/components/map/MapContainer";
 import { ControlToolbar } from "@/components/ui-overlays/ControlToolbar";
 import { FoodPanel } from "@/components/ui-overlays/FoodPanel";
@@ -40,12 +40,21 @@ export default function Home() {
       {/* User Profile / Auth Button */}
       <div className="absolute top-4 right-4 z-50 flex items-center gap-2">
         <button 
-          onClick={() => setIsFoodPanelOpen(!isFoodPanelOpen)}
+          onClick={() => {
+            if (isFoodPanelOpen) {
+              setSelectedHotspot(null);
+            } else {
+              setSelectedHotspot('cp');
+            }
+          }}
           className="flex items-center gap-2 bg-black/80 backdrop-blur-xl border border-white/10 rounded-full px-4 py-2 hover:bg-white/10 transition-colors shadow-2xl text-sm font-bold"
         >
           🍔 Top Eats
         </button>
-        <button className="flex items-center gap-2 bg-orange-600 hover:bg-orange-500 transition-colors text-white rounded-full px-4 py-2 shadow-2xl text-sm font-bold">
+        <button 
+          onClick={() => alert('🔐 Sign In with Supabase Auth coming soon! Connect your Supabase project to enable this.')}
+          className="flex items-center gap-2 bg-orange-600 hover:bg-orange-500 transition-colors text-white rounded-full px-4 py-2 shadow-2xl text-sm font-bold"
+        >
           <UserCircle size={16} />
           Sign In
         </button>

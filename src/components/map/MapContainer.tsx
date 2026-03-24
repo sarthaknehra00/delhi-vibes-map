@@ -49,7 +49,7 @@ export function MapContainer() {
         type: 'Feature',
         properties: {
           category: dominant,
-          opacity: Math.min(0.8, 0.3 + totalVotes * 0.1),
+          opacity: 0.22, // Soft, highly translucent, visually pleasing opacity
         },
         geometry: {
           type: 'Polygon',

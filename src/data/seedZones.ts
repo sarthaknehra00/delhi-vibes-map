@@ -10,13 +10,14 @@ interface SeedZone {
 // Deep socio-economic research mapping for Delhi NCR
 export const SEED_ZONES: SeedZone[] = [
   // --- RICH / ELITE (Emerald) ---
-  { lat: 28.5535, lng: 77.2588, radius: 4, category: 'rich' }, // GK / South Ext
+  { lat: 28.5535, lng: 77.2588, radius: 5, category: 'rich' }, // GK / South Ext
   { lat: 28.5415, lng: 77.1554, radius: 4, category: 'rich' }, // Vasant Vihar
-  { lat: 28.5750, lng: 77.2210, radius: 3, category: 'rich' }, // Defence Colony / Lodhi / Amrita Shergill Marg
+  { lat: 28.5750, lng: 77.2210, radius: 4, category: 'rich' }, // Defence Colony / Lodhi / Amrita Shergill Marg
   { lat: 28.5950, lng: 77.1900, radius: 4, category: 'rich' }, // Chanakyapuri (Diplomatic Enclave)
-  { lat: 28.4550, lng: 77.0980, radius: 4, category: 'rich' }, // Golf Course Road, Gurgaon
+  { lat: 28.4550, lng: 77.0980, radius: 5, category: 'rich' }, // Golf Course Road, Gurgaon
   { lat: 28.5420, lng: 77.2020, radius: 3, category: 'rich' }, // Hauz Khas Enclave
-  { lat: 28.5550, lng: 77.2650, radius: 3, category: 'rich' }, // New Friends Colony
+  { lat: 28.5550, lng: 77.2650, radius: 4, category: 'rich' }, // New Friends Colony
+  { lat: 28.6480, lng: 77.3160, radius: 5, category: 'rich' }, // Anand Vihar (Requested directly by user)
 
   // --- CORPORATE SUITS (Indigo) ---
   { lat: 28.4900, lng: 77.0880, radius: 4, category: 'corporate' }, // Cyber City Enclave, DLF Phase 2/3
@@ -27,21 +28,21 @@ export const SEED_ZONES: SeedZone[] = [
 
   // --- MIDDLE CLASS (Blue) ---
   { lat: 28.6250, lng: 77.0870, radius: 6, category: 'middleClass' }, // Janakpuri
-  { lat: 28.6476, lng: 77.1230, radius: 4, category: 'middleClass' }, // Rajouri Garden / Punjabi Bagh
-  { lat: 28.5820, lng: 77.0500, radius: 6, category: 'middleClass' }, // Dwarka Subcity
-  { lat: 28.6970, lng: 77.1350, radius: 5, category: 'middleClass' }, // Pitampura / Rohini Sec 3+
+  { lat: 28.6476, lng: 77.1230, radius: 5, category: 'middleClass' }, // Rajouri Garden / Punjabi Bagh
+  { lat: 28.5820, lng: 77.0500, radius: 7, category: 'middleClass' }, // Dwarka Subcity
+  { lat: 28.6970, lng: 77.1350, radius: 6, category: 'middleClass' }, // Pitampura / Rohini Sec 3+
   { lat: 28.6370, lng: 77.2940, radius: 4, category: 'middleClass' }, // Preet Vihar / Laxmi Nagar (Part)
-  { lat: 28.6000, lng: 77.2980, radius: 4, category: 'middleClass' }, // Mayur Vihar Phase 1 & 2
+  { lat: 28.6000, lng: 77.2980, radius: 5, category: 'middleClass' }, // Mayur Vihar Phase 1 & 2
   { lat: 28.5850, lng: 77.0800, radius: 5, category: 'middleClass' }, // Palam (Requested directly by user)
-  { lat: 28.6200, lng: 77.0580, radius: 4, category: 'middleClass' }, // Uttam Nagar
+  { lat: 28.6200, lng: 77.0580, radius: 5, category: 'middleClass' }, // Uttam Nagar
+  { lat: 28.6738, lng: 77.2940, radius: 4, category: 'middleClass' }, // Shahdara (Requested directly by user)
 
   // --- POOR / WORKING CLASS (Amber) ---
-  { lat: 28.6480, lng: 77.3160, radius: 5, category: 'poor' }, // Anand Vihar / Ghazipur borders
-  { lat: 28.6650, lng: 77.2650, radius: 4, category: 'poor' }, // Seelampur / Jaffrabad
+  { lat: 28.7100, lng: 77.0500, radius: 6, category: 'poor' }, // Najafgarh deeper outskirts
+  { lat: 28.6650, lng: 77.2650, radius: 5, category: 'poor' }, // Seelampur / Jaffrabad
   { lat: 28.7300, lng: 77.1700, radius: 5, category: 'poor' }, // Jahangirpuri
-  { lat: 28.5200, lng: 77.2800, radius: 4, category: 'poor' }, // Tughlakabad Extension / Sangam Vihar
-  { lat: 28.6180, lng: 77.0000, radius: 5, category: 'poor' }, // Najafgarh outskirts
-  { lat: 28.6600, lng: 77.3000, radius: 3, category: 'poor' }, // Nand Nagri / Trilokpuri
+  { lat: 28.5200, lng: 77.2800, radius: 5, category: 'poor' }, // Tughlakabad Extension / Sangam Vihar
+  { lat: 28.6600, lng: 77.3000, radius: 4, category: 'poor' }, // Nand Nagri / Trilokpuri
   
   // --- STUDENTS (Pink) ---
   { lat: 28.6921, lng: 77.2065, radius: 4, category: 'students' }, // North Campus / Hudson Lane
@@ -60,7 +61,6 @@ export const SEED_ZONES: SeedZone[] = [
 
   // --- SKETCHY / UNSAFE (Red) ---
   { lat: 28.6430, lng: 77.2200, radius: 2, category: 'sketchy' }, // GB Road (Notorious)
-  { lat: 28.6738, lng: 77.2940, radius: 3, category: 'sketchy' }, // Shahdara back-alleys at night (Requested area vibe)
   { lat: 28.7400, lng: 77.0500, radius: 5, category: 'sketchy' }, // Bawana / Outer Narela industrial belts
   { lat: 28.4300, lng: 77.1100, radius: 4, category: 'sketchy' }, // Gurgaon-Faridabad secluded highway stretches
   { lat: 28.5130, lng: 77.1700, radius: 3, category: 'sketchy' }, // Deep Mahipalpur / Chhatarpur borders late night

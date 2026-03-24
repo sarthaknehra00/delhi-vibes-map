@@ -40,36 +40,49 @@ interface PaintStore {
   clearAll: () => void;
 }
 
-// Pre-compute the sociological grid zones based on our researched SEED_ZONES
+// Form a dense Voronoi map across the entire bounds of the Delhi NCR grid
 function createSeededCells(): Map<string, GridCell> {
   const map = new Map<string, GridCell>();
   
-  SEED_ZONES.forEach((zone) => {
-    const center = latLngToCell(zone.lat, zone.lng);
-    const rad = zone.radius;
-    
-    // Draw an organic circle around the center point on the grid
-    for (let r = center.row - rad; r <= center.row + rad; r++) {
-      for (let c = center.col - rad; c <= center.col + rad; c++) {
-        // Calculate distance to create a smooth circular zone
-        const dist = Math.sqrt(Math.pow(r - center.row, 2) + Math.pow(c - center.col, 2));
+  // Delhi NCR approximate bounding box
+  const minLat = 28.30;
+  const maxLat = 28.95;
+  const minLng = 76.80;
+  const maxLng = 77.45;
+  
+  const minCell = latLngToCell(minLat, minLng);
+  const maxCell = latLngToCell(maxLat, maxLng);
+  
+  // Precompute grid indices for seeds to save math in the hot loop
+  const seedsWithCoords = SEED_ZONES.map(z => ({
+    ...z,
+    center: latLngToCell(z.lat, z.lng)
+  }));
+
+  for (let r = minCell.row; r <= maxCell.row; r++) {
+    for (let c = minCell.col; c <= maxCell.col; c++) {
+      let closestCategory: CategoryId = 'normies';
+      let minDistance = Infinity;
+
+      // Nearest-neighbor (Voronoi) mapping weighted by the zone's influence radius
+      for (const zone of seedsWithCoords) {
+        // Calculate squared Euclidean distance to this grid point
+        const distSq = Math.pow(r - zone.center.row, 2) + Math.pow(c - zone.center.col, 2);
         
-        if (dist <= rad) {
-          const key = `${r},${c}`;
-          // The closer to the center, the stronger the opacity/votes
-          const intensity = Math.max(1, Math.floor((rad - dist) * 3));
-          
-          if (!map.has(key)) {
-            map.set(key, { row: r, col: c, votes: { [zone.category]: intensity * 2 } });
-          } else {
-            // Blend overlapping clusters
-            const cell = map.get(key)!;
-            cell.votes[zone.category] = (cell.votes[zone.category] || 0) + intensity * 2;
-          }
+        // Weight by the radius (larger radius = stronger 'gravitational' pull)
+        const weightedDist = distSq / (zone.radius * zone.radius);
+        
+        if (weightedDist < minDistance) {
+          minDistance = weightedDist;
+          closestCategory = zone.category;
         }
       }
+
+      // Add the cell to the map with 10 votes to solidify the dominant category
+      const key = `${r},${c}`;
+      map.set(key, { row: r, col: c, votes: { [closestCategory]: 10 } });
     }
-  });
+  }
   
   return map;
 }

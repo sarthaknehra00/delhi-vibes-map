@@ -135,16 +135,12 @@ export function MapContainer() {
     <div className="absolute inset-0 w-full h-full bg-[#0d0d0d]">
       <DeckGL
         initialViewState={INITIAL_VIEW_STATE}
-        controller={drawMode === "navigate" ? { dragPan: true, dragRotate: false } : { dragPan: false, dragRotate: false, scrollZoom: true }}
+        controller={{ dragPan: true, dragRotate: false, scrollZoom: true }}
         layers={deckLayers}
-        onDragStart={handleMouseDown}
-        onDrag={handleDrag}
-        onDragEnd={handleMouseUp}
-        onClick={(info, event) => {
-          if (handleLayerClick(info)) return;
-          handleMouseDown(info, event);
+        onClick={(info) => {
+          handleLayerClick(info);
         }}
-        getCursor={() => drawMode === "navigate" ? "grab" : "crosshair"}
+        getCursor={() => "grab"}
       >
         <Map
           ref={mapRef}

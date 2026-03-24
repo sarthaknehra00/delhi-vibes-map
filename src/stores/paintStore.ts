@@ -1,6 +1,13 @@
 import { create } from "zustand";
 import { CategoryId } from "@/data/categories";
-import { GridCell, cellKey, latLngToCell, getCellsInBrush } from "@/lib/gridUtils";
+import { SEED_ZONES } from '@/data/seedZones';
+import { cellKey, latLngToCell, getCellsInBrush } from "@/lib/gridUtils";
+
+export interface GridCell {
+  row: number;
+  col: number;
+  votes: Partial<Record<CategoryId, number>>;
+}
 
 export type BrushSize = "small" | "medium" | "large";
 export type DrawMode = "free" | "pixel" | "navigate"; // Added "navigate" as default
@@ -33,9 +40,43 @@ interface PaintStore {
   clearAll: () => void;
 }
 
+// Pre-compute the sociological grid zones based on our researched SEED_ZONES
+function createSeededCells(): Map<string, GridCell> {
+  const map = new Map<string, GridCell>();
+  
+  SEED_ZONES.forEach((zone) => {
+    const center = latLngToCell(zone.lat, zone.lng);
+    const rad = zone.radius;
+    
+    // Draw an organic circle around the center point on the grid
+    for (let r = center.row - rad; r <= center.row + rad; r++) {
+      for (let c = center.col - rad; c <= center.col + rad; c++) {
+        // Calculate distance to create a smooth circular zone
+        const dist = Math.sqrt(Math.pow(r - center.row, 2) + Math.pow(c - center.col, 2));
+        
+        if (dist <= rad) {
+          const key = `${r},${c}`;
+          // The closer to the center, the stronger the opacity/votes
+          const intensity = Math.max(1, Math.floor((rad - dist) * 3));
+          
+          if (!map.has(key)) {
+            map.set(key, { row: r, col: c, votes: { [zone.category]: intensity * 2 } });
+          } else {
+            // Blend overlapping clusters
+            const cell = map.get(key)!;
+            cell.votes[zone.category] = (cell.votes[zone.category] || 0) + intensity * 2;
+          }
+        }
+      }
+    }
+  });
+  
+  return map;
+}
+
 export const usePaintStore = create<PaintStore>((set, get) => ({
-  cells: new Map(), // Starting empty for Next.js app, will sync from DB
-  selectedCategory: "cool",
+  cells: createSeededCells(), // Starting empty for Next.js app, will sync from DB
+  selectedCategory: "middleClass",
   brushSize: "medium",
   drawMode: "navigate", // Map works normally by default
   activeTool: "paint",

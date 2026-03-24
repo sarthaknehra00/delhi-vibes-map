@@ -1,4 +1,3 @@
-// Same exact categories from the Vite app
 export interface Category {
   id: CategoryId;
   label: string;
@@ -11,70 +10,79 @@ export interface Category {
 export const CATEGORIES: Category[] = [
   {
     id: "rich",
-    label: "Rich / Posh",
-    color: "#2ecc71",
-    colorRgba: "rgba(46, 204, 113, 0.45)",
+    label: "Rich / Elite",
+    color: "#10b981", // Emerald
+    colorRgba: "rgba(16, 185, 129, 0.45)",
     emoji: "💎",
-    description: "Where the wallets are fat and the attitudes are bigger",
+    description: "Posh houses, imported cars, and generational wealth",
   },
   {
-    id: "cool",
-    label: "Cool / Hip",
-    color: "#f1c40f",
-    colorRgba: "rgba(241, 196, 15, 0.45)",
-    emoji: "😎",
-    description: "Artsy cafes, fixie bikes, and people who 'just moved here'",
+    id: "middleClass",
+    label: "Middle Class",
+    color: "#3b82f6", // Blue
+    colorRgba: "rgba(59, 130, 246, 0.45)",
+    emoji: "🏡",
+    description: "Family hubs, 2BHK dreams, and decent street food",
   },
   {
-    id: "tourist",
-    label: "Tourists",
-    color: "#e74c3c",
-    colorRgba: "rgba(231, 76, 60, 0.45)",
-    emoji: "📸",
-    description: "Selfie sticks, overpriced food, and 'excuse me where is...'",
+    id: "poor",
+    label: "Poor / Working Class",
+    color: "#f59e0b", // Amber
+    colorRgba: "rgba(245, 158, 11, 0.45)",
+    emoji: "🏗️",
+    description: "The backbone of the city. Dense and chaotic.",
   },
   {
-    id: "suits",
-    label: "Corporate / Suits",
-    color: "#3498db",
-    colorRgba: "rgba(52, 152, 219, 0.45)",
+    id: "corporate",
+    label: "Corporate Suits",
+    color: "#6366f1", // Indigo
+    colorRgba: "rgba(99, 102, 241, 0.45)",
     emoji: "🏢",
-    description: "LinkedIn warriors grinding 9-to-whenever-the-boss-leaves",
+    description: "Glass towers, traffic jams, and overpriced coffee",
   },
   {
     id: "students",
     label: "Students",
-    color: "#8e44ad",
-    colorRgba: "rgba(142, 68, 173, 0.45)",
+    color: "#ec4899", // Pink
+    colorRgba: "rgba(236, 72, 153, 0.45)",
     emoji: "🎓",
-    description: "Broke, caffeinated, and always 'preparing for something'",
+    description: "PGs, momos, and late-night study panic",
   },
   {
-    id: "normies",
-    label: "Normies",
-    color: "#95a5a6",
-    colorRgba: "rgba(149, 165, 166, 0.45)",
-    emoji: "🙂",
-    description: "Regular humans doing regular human things",
+    id: "tourist",
+    label: "Tourists",
+    color: "#8b5cf6", // Purple
+    colorRgba: "rgba(139, 92, 246, 0.45)",
+    emoji: "📸",
+    description: "Monuments, selfies, and aggressive auto drivers",
   },
   {
     id: "sketchy",
     label: "Sketchy / Unsafe",
-    color: "#2c3e50",
-    colorRgba: "rgba(44, 62, 80, 0.45)",
+    color: "#ef4444", // Red
+    colorRgba: "rgba(239, 68, 68, 0.45)",
     emoji: "⚠️",
-    description: "Don't walk here at 2am. Or maybe even 2pm.",
+    description: "Do not visit after dark. Seriously.",
+  },
+  {
+    id: "normies",
+    label: "Normies",
+    color: "#6b7280", // Gray
+    colorRgba: "rgba(107, 114, 128, 0.45)",
+    emoji: "🙂",
+    description: "Just normal residential zones. Nothing crazy.",
   },
 ];
 
 export type CategoryId =
   | "rich"
-  | "cool"
-  | "tourist"
-  | "suits"
+  | "middleClass"
+  | "poor"
+  | "corporate"
   | "students"
-  | "normies"
-  | "sketchy";
+  | "tourist"
+  | "sketchy"
+  | "normies";
 
 export const CATEGORY_MAP = Object.fromEntries(
   CATEGORIES.map((c) => [c.id, c])

@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { MapContainer } from "@/components/map/MapContainer";
 import { ControlToolbar } from "@/components/ui-overlays/ControlToolbar";
 import { FoodPanel } from "@/components/ui-overlays/FoodPanel";
+import { VibePlayer } from "@/components/ui-overlays/VibePlayer";
 import { useFoodStore } from "@/stores/foodStore";
 import { MapPin, UserCircle } from "lucide-react";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -65,6 +66,9 @@ export default function Home() {
 
       {/* Slide-out Food & Vibes Ranking Panel */}
       <FoodPanel isOpen={isFoodPanelOpen} onClose={() => setIsFoodPanelOpen(false)} />
+
+      {/* Floating Vibe Player */}
+      <VibePlayer />
 
       {/* Footer warning */}
       <div className="absolute bottom-2 left-4 z-50 text-[10px] text-white/30 font-medium tracking-wide">

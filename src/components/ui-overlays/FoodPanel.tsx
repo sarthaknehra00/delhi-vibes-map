@@ -6,11 +6,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFoodStore } from "@/stores/foodStore";
+import { useAudioStore } from "@/stores/audioStore";
+import { useEffect } from "react";
 import { HOTSPOTS } from "@/data/hotspots";
 import { cn } from "@/lib/utils";
 
 export function FoodPanel({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { selectedHotspotId, getTop5ForHotspot, voteRestaurant, addRestaurant } = useFoodStore();
+  const { playVibe } = useAudioStore();
   const [isAdding, setIsAdding] = useState(false);
   const [newName, setNewName] = useState("");
   const [newDesc, setNewDesc] = useState("");
@@ -25,6 +28,13 @@ export function FoodPanel({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
     selectedHotspotId ? getTop5ForHotspot(selectedHotspotId) : [],
     [selectedHotspotId, getTop5ForHotspot]
   );
+
+  useEffect(() => {
+    if (isOpen && hotspot) {
+      // Play the specific vibe or a default Delhi vibe
+      playVibe(hotspot.vibeQuery || 'Delhi Belly Bhaag D.K. Bose');
+    }
+  }, [isOpen, selectedHotspotId]); // only trigger when hotspot changes or panel opens
 
   if (!isOpen || !hotspot) return null;
 

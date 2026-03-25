@@ -1,9 +1,9 @@
 "use client";
 
 import { useRef, useCallback, useMemo } from 'react';
-import Map, { MapRef } from 'react-map-gl/mapbox';
+import Map, { MapRef, Marker } from 'react-map-gl/mapbox';
 import { DeckGL } from '@deck.gl/react';
-import { GeoJsonLayer, TextLayer } from '@deck.gl/layers';
+import { GeoJsonLayer } from '@deck.gl/layers';
 import { usePaintStore } from '@/stores/paintStore';
 import { useFoodStore } from '@/stores/foodStore';
 import { useWeatherStore, TimeOfDay } from '@/stores/weatherStore';
@@ -39,17 +39,19 @@ export function MapContainer() {
 
   // Convert cells map to GeoJSON for Deck.gl
   const geoJsonData = useMemo(() => {
+    // Dynamic opacity based on sun cycle - boost saturation linearly in daylight to beat the white basemap
+    const baseOpacity = (timeOfDay === 'morning' || timeOfDay === 'afternoon') ? 0.45 : 0.22;
+    
     // We add 'version' as a dependency to force re-render when cells map is updated
     const features: any[] = [];
     cells.forEach((cell, key) => {
       const dominant = getDominantCategory(cell.votes);
       if (!dominant) return;
-      const totalVotes = Object.values(cell.votes).reduce((a, b) => a + b, 0);
       features.push({
         type: 'Feature',
         properties: {
           category: dominant,
-          opacity: 0.22, // Soft, highly translucent, visually pleasing opacity
+          opacity: baseOpacity, // Context-aware opacity
         },
         geometry: {
           type: 'Polygon',
@@ -58,7 +60,7 @@ export function MapContainer() {
       });
     });
     return { type: 'FeatureCollection', features };
-  }, [cells, version]);
+  }, [cells, version, timeOfDay]);
 
   const deckLayers = [
     new GeoJsonLayer({
@@ -76,23 +78,6 @@ export function MapContainer() {
         return [r, g, b, Math.floor(d.properties.opacity * 255)];
       },
     }),
-    new TextLayer({
-      id: 'hotspots-layer',
-      data: HOTSPOTS,
-      pickable: true,
-      getPosition: (d: any) => [d.lng, d.lat],
-      getText: (d: any) => d.name,
-      getSize: 14,
-      getAngle: 0,
-      getTextAnchor: 'middle',
-      getAlignmentBaseline: 'center',
-      getColor: [255, 255, 255, 140],
-      background: false,
-      fontWeight: '500',
-      fontFamily: 'Inter, sans-serif',
-      outlineWidth: 3,
-      outlineColor: [0, 0, 0, 200],
-    })
   ];
 
   const handleLayerClick = useCallback((info: any) => {
@@ -144,7 +129,27 @@ export function MapContainer() {
           mapStyle={getMapStyle(timeOfDay)}
           mapboxAccessToken={MAPBOX_TOKEN}
           reuseMaps
-        />
+        >
+          {HOTSPOTS.map((hotspot) => (
+            <Marker key={hotspot.id} longitude={hotspot.lng} latitude={hotspot.lat} anchor="center" style={{zIndex: 50}}>
+              <div 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedHotspot(hotspot.id);
+                }}
+                className="group relative flex flex-col items-center justify-center cursor-pointer transition-all hover:scale-110 hover:z-50"
+              >
+                {/* Advanced DOM Element Label */}
+                <span className="backdrop-blur-md bg-black/75 text-white px-3 py-1.5 rounded-full text-xs font-semibold border border-white/20 shadow-xl whitespace-nowrap">
+                  {hotspot.name}
+                </span>
+                
+                {/* Decorative Map Pin Base */}
+                <div className="w-1.5 h-1.5 bg-white rounded-full mt-1 shadow-md opacity-70 group-hover:opacity-100 group-hover:scale-125 transition-all"></div>
+              </div>
+            </Marker>
+          ))}
+        </Map>
       </DeckGL>
     </div>
   );

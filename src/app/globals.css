@@ -63,3 +63,24 @@
 .mapboxgl-ctrl-attrib a {
   color: rgba(255, 255, 255, 0.7) !important;
 }
+
+/* Crime popup overrides — remove default white Mapbox popup */
+.mapboxgl-popup-content {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+.mapboxgl-popup-tip {
+  border-top-color: rgba(10, 10, 10, 0.95) !important;
+}
+.mapboxgl-popup-close-button {
+  color: rgba(255, 255, 255, 0.4) !important;
+  font-size: 18px !important;
+  right: 6px !important;
+  top: 4px !important;
+}
+.mapboxgl-popup-close-button:hover {
+  color: rgba(255, 255, 255, 0.8) !important;
+  background: transparent !important;
+}

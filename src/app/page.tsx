@@ -4,6 +4,10 @@ import { useState, useCallback } from "react";
 import { MapContainer } from "@/components/map/MapContainer";
 import { ControlToolbar } from "@/components/ui-overlays/ControlToolbar";
 import { FoodPanel } from "@/components/ui-overlays/FoodPanel";
+import { CrimePanel } from "@/components/ui-overlays/CrimePanel";
+import { MarketPanel } from "@/components/ui-overlays/MarketPanel";
+import { IntentEngine } from "@/components/ui-overlays/IntentEngine";
+import { AreaIntelligencePanel } from "@/components/ui-overlays/AreaIntelligencePanel";
 import { VibePlayer } from "@/components/ui-overlays/VibePlayer";
 import { WeatherWidget } from "@/components/ui-overlays/WeatherWidget";
 import { WeatherEffects } from "@/components/ui-overlays/WeatherEffects";
@@ -77,6 +81,16 @@ export default function Home() {
 
       {/* Floating Vibe Player */}
       <VibePlayer />
+
+      {/* Market Explorer Panel */}
+      <MarketPanel />
+
+      {/* Urban Intelligence UI */}
+      <IntentEngine />
+      <AreaIntelligencePanel />
+
+      {/* Crime Data Overlay */}
+      <CrimePanel />
 
       {/* Footer warning */}
       <div className="absolute bottom-2 left-4 z-50 text-[10px] text-white/30 font-medium tracking-wide">

@@ -12,7 +12,7 @@ import { HOTSPOTS } from "@/data/hotspots";
 import { cn } from "@/lib/utils";
 
 export function FoodPanel({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const { selectedHotspotId, getTop5ForHotspot, voteRestaurant, addRestaurant } = useFoodStore();
+  const { selectedHotspotId, getTop5ForHotspot, voteRestaurant, addRestaurant, getHotspot } = useFoodStore();
   const { playVibe } = useAudioStore();
   const [isAdding, setIsAdding] = useState(false);
   const [newName, setNewName] = useState("");
@@ -20,8 +20,8 @@ export function FoodPanel({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   const [newCat, setNewCat] = useState<'Street Food' | 'Cafes' | 'Fine Dining' | 'Hidden Gems'>("Street Food");
 
   const hotspot = useMemo(() => 
-    HOTSPOTS.find(h => h.id === selectedHotspotId),
-    [selectedHotspotId]
+    getHotspot(selectedHotspotId),
+    [selectedHotspotId, getHotspot]
   );
 
   const top5 = useMemo(() => 

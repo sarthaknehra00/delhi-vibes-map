@@ -45,7 +45,7 @@ function isDarkTheme(time: TimeOfDay) {
   return time === 'evening' || time === 'night';
 }
 
-export function MapContainer() {
+export function MapContainer({ onPlaceClick }: { onPlaceClick?: (placeName: string) => void }) {
   const mapRef = useRef<MapRef>(null);
   const { cells, version, drawMode, activeTool, isDrawing, startDrawing, stopDrawing, paintAt, eraseAt } = usePaintStore();
   const { setSelectedHotspot } = useFoodStore();
@@ -210,8 +210,25 @@ export function MapContainer() {
         viewState={viewState}
         controller={{ dragPan: true, dragRotate: false, scrollZoom: true }}
         layers={deckLayers}
-        onClick={(info) => {
-          handleLayerClick(info);
+        onClick={(info, e) => {
+          const handled = handleLayerClick(info);
+          if (!handled && onPlaceClick && e.offsetCenter) {
+            const map = mapRef.current?.getMap();
+            if (map) {
+              const features = map.queryRenderedFeatures([e.offsetCenter.x, e.offsetCenter.y]);
+              const place = features.find((f: any) => 
+                f.sourceLayer === 'poi_label' || 
+                f.sourceLayer === 'place_label' || 
+                f.layer?.id?.includes('label') ||
+                f.layer?.id?.includes('poi') ||
+                f.layer?.id?.includes('place')
+              );
+              const name = place?.properties?.name || place?.properties?.name_en;
+              if (name) {
+                onPlaceClick(name);
+              }
+            }
+          }
         }}
         onViewStateChange={({ viewState: newViewState }: any) => {
           setViewState(newViewState);

@@ -27,7 +27,7 @@ export function MarketPanel() {
           hover:bg-white/5 hover:border-white/20 hover:text-white
           transition-all shadow-lg text-sm font-black
         "
-        style={{ right: "180px" }} // Positioned next to other main HUD controls
+        style={{ right: "260px" }} // Positioned safely to the left of Top Eats and Sign In
       >
         <ShoppingBag size={15} />
         Markets

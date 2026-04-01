@@ -19,8 +19,19 @@ A highly interactive, deeply-researched socio-economic discovery platform for De
    - Example: Clicking *Hauz Khas* plays Lana Del Rey, while clicking *Shahdara* plays Seedhe Maut.
    - Features a floating glassmorphic Audio Player with robust network/timeout error handling.
 
-4. **Curated Food Discovery Engine**
+4. **Urban Intelligence Engine (Gemini 3.0 Flash)**
+   - **AI-Powered Exploration Chat**: A premium glassmorphic chat assistant that gives personalized, street-smart advice about Delhi NCR food, culture, safety, and shopping.
+   - **Dynamic Hotspot Generation**: Clicking *any* neighborhood label on the map (even unmapped ones like Okhla or Dilshad Garden) triggers Gemini 3.0 to generate a real-time vibe profile, top eat recommendations, and a matching theme song.
+   - **Integrated Safety Intelligence**: Powered by official **2023 NCRB Crime Data**. The AI cross-references real crime statistics to give users honest safety advice and warnings for specific districts.
+   - **Interactive AI-led Navigation**: AI responses include structured markers that convert into interactive `📍 LOCATE` buttons, triggering smooth map `flyTo` animations.
+
+5. **Official NCRB Crime Heatmap**
+   - Visualizes multi-year official crime data (2021-2023) across all 15 Delhi Police districts and 4 NCR cities.
+   - Includes category-specific filtering (Theft, Snatching, Cybercrime, etc.) with density-weighted heatmaps.
+
+6. **Curated Food Discovery Engine**
    - 300+ heavily researched Delhi NCR restaurants and street food hotspots mapped to 80+ localities.
+   - Now enhanced with AI-generated recommendations for niche neighborhoods.
 
 ---
 

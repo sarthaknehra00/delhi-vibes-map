@@ -8,6 +8,7 @@ import { CrimePanel } from "@/components/ui-overlays/CrimePanel";
 import { MarketPanel } from "@/components/ui-overlays/MarketPanel";
 import { IntentEngine } from "@/components/ui-overlays/IntentEngine";
 import { AreaIntelligencePanel } from "@/components/ui-overlays/AreaIntelligencePanel";
+import { AIChatPanel } from "@/components/ui-overlays/AIChatPanel";
 import { VibePlayer } from "@/components/ui-overlays/VibePlayer";
 import { WeatherWidget } from "@/components/ui-overlays/WeatherWidget";
 import { WeatherEffects } from "@/components/ui-overlays/WeatherEffects";
@@ -23,11 +24,83 @@ export default function Home() {
     if (!open) setSelectedHotspot(null);
   };
 
+  // AI Chat Panel state
+  const [isAIChatOpen, setIsAIChatOpen] = useState(false);
+  const [aiInitialQuery, setAiInitialQuery] = useState<string | undefined>(undefined);
+  const [isGeneratingHotspot, setIsGeneratingHotspot] = useState(false);
+
+  const handleAISearch = useCallback((query: string) => {
+    setAiInitialQuery(query);
+    setIsAIChatOpen(true);
+  }, []);
+
+  const handlePlaceClick = useCallback(async (placeName: string) => {
+    const store = useFoodStore.getState();
+    const existingParamId = placeName.toLowerCase().replace(/\s+/g, '');
+    let existing = store.getHotspot(existingParamId);
+    
+    // Also try checking by exact name
+    if (!existing) {
+      existing = store.dynamicHotspots.find(h => h.name.toLowerCase() === placeName.toLowerCase());
+    }
+    
+    if (existing) {
+      setSelectedHotspot(existing.id);
+      return;
+    }
+
+    // Dynamic AI Generation
+    try {
+      setIsGeneratingHotspot(true);
+      const res = await fetch('/api/hotspot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ placeName })
+      });
+
+      if (!res.ok) throw new Error('Failed to generate hotspot');
+      
+      const data = await res.json();
+      if (data && data.description) {
+        const newId = `dynamic_${Date.now()}`;
+        const newHotspot = {
+          id: newId,
+          name: placeName,
+          lat: 28.6139, // placeholder for map UI usage if needed
+          lng: 77.2090,
+          description: data.description,
+          vibeQuery: data.vibeQuery || 'Delhi Belly Bhaag D.K. Bose',
+          tier: 3 as const
+        };
+
+        const newRestaurants = (data.restaurants || []).map((r: any) => ({
+          id: Math.random().toString(36).substring(7),
+          name: r.name,
+          hotspotId: newId,
+          category: r.category || 'Street Food',
+          votes: Math.floor(Math.random() * 50) + 10,
+          description: r.description,
+          addedBy: "Delhi Vibe AI"
+        }));
+
+        store.addDynamicHotspot(newHotspot, newRestaurants);
+        setSelectedHotspot(newId);
+      }
+    } catch (e) {
+      console.error(e);
+      alert('AI rate limited or busy. Could not scan vibe right now.');
+    } finally {
+      setIsGeneratingHotspot(false);
+    }
+  }, [setSelectedHotspot]);
+
   return (
     <main className="relative w-screen h-screen overflow-hidden bg-black text-white selection:bg-yellow-500/30">
       
       {/* 3D Mapbox + Deck.gl Engine */}
-      <MapContainer />
+      <MapContainer 
+        onPlaceClick={handlePlaceClick} 
+      />
       
       {/* Ambient Weather Overlays (CSS Rain/Thunder/Fog) */}
       <WeatherEffects />
@@ -86,11 +159,30 @@ export default function Home() {
       <MarketPanel />
 
       {/* Urban Intelligence UI */}
-      <IntentEngine />
+      <IntentEngine onAISearch={handleAISearch} />
       <AreaIntelligencePanel />
+
+      {/* AI Chat Panel */}
+      <AIChatPanel 
+        isOpen={isAIChatOpen} 
+        onClose={() => { setIsAIChatOpen(false); setAiInitialQuery(undefined); }} 
+        initialQuery={aiInitialQuery} 
+      />
 
       {/* Crime Data Overlay */}
       <CrimePanel />
+
+      {isGeneratingHotspot && (
+        <div className="absolute inset-0 z-[150] bg-black/40 backdrop-blur-md flex items-center justify-center animate-in fade-in duration-300">
+          <div className="bg-[#0a0a0a]/90 border border-yellow-500/20 px-6 py-4 rounded-2xl flex items-center gap-4 shadow-2xl">
+            <div className="w-8 h-8 rounded-full border-t-2 border-r-2 border-yellow-400 animate-spin" />
+            <div>
+              <p className="text-white font-black tracking-tight">AI Scanning Area Vibe...</p>
+              <p className="text-xs text-white/50 tracking-widest font-bold uppercase mt-0.5">Finding top eats & songs</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer warning */}
       <div className="absolute bottom-2 left-4 z-50 text-[10px] text-white/30 font-medium tracking-wide">
@@ -99,3 +191,4 @@ export default function Home() {
     </main>
   );
 }
+

@@ -7,7 +7,7 @@ import { AREA_PROFILES } from "@/data/areaProfiles";
 import { X, Shield, Users, Clock, AlertTriangle, CheckCircle2 } from "lucide-react";
 
 export function AreaIntelligencePanel() {
-  const { focusedMarket } = useMarketStore();
+  const { focusedMarket, resetView } = useMarketStore();
   const { getRealTimeContext } = useIntelligenceStore();
   const { timeOfDay } = useWeatherStore();
 
@@ -52,6 +52,14 @@ export function AreaIntelligencePanel() {
         <div className="text-[10px] font-black text-white/50 tracking-widest bg-black/40 px-2 rounded-full border border-white/5">
           {'$'.repeat(intel.costLevel)}<span className="opacity-20">{'$'.repeat(3 - intel.costLevel)}</span>
         </div>
+
+        {/* Close Button */}
+        <button
+          onClick={resetView}
+          className="w-6 h-6 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/15 text-white/40 hover:text-white transition-all ml-1"
+        >
+          <X size={14} />
+        </button>
       </div>
 
       <div className="p-4">

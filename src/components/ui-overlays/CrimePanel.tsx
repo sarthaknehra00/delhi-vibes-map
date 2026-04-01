@@ -58,7 +58,7 @@ export function CrimePanel() {
               : "bg-[#0a0a0a]/90 border-white/10 text-white/70 hover:bg-white/5 hover:border-white/20"
           }
         `}
-        style={{ right: "330px" }}
+        style={{ right: "390px" }}
       >
         <Shield size={15} />
         Crime Data

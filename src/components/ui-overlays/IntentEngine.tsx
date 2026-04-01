@@ -17,11 +17,16 @@ const INTENT_TAGS = [
   "Hidden gem"
 ];
 
-export function IntentEngine() {
+export function IntentEngine({
+  onAISearch
+}: {
+  onAISearch?: (query: string) => void;
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const { queryTopMatchesForIntent, setHighlightedAreas } = useIntelligenceStore();
   const { triggerFlyTo } = useMarketStore();
   const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [searchValue, setSearchValue] = useState("");
 
   const handleIntentSelection = (intent: string) => {
     setActiveTag(intent);
@@ -44,6 +49,16 @@ export function IntentEngine() {
       // Close the intent picker after 1 second so the user can enjoy the flyTo
       setTimeout(() => setIsOpen(false), 1000);
     }
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchValue.trim()) return;
+    
+    // Close the Intent overlay and push the query to the AI Chat Panel
+    setIsOpen(false);
+    onAISearch?.(searchValue.trim());
+    setSearchValue("");
   };
 
   if (!isOpen) {
@@ -86,18 +101,31 @@ export function IntentEngine() {
         </p>
       </div>
 
-      {/* Spotlight Search (Visual only, acting as a filter for tags below) */}
-      <div className="relative w-full max-w-2xl px-6 mb-12">
-        <div className="relative flex items-center bg-white/5 border border-white/10 rounded-2xl p-2 px-4 shadow-2xl backdrop-blur-xl">
+      {/* Active Search Bar */}
+      <form onSubmit={handleSearchSubmit} className="relative w-full max-w-2xl px-6 mb-12">
+        <div className="relative flex items-center bg-white/5 border border-white/10 rounded-2xl p-2 px-4 shadow-2xl backdrop-blur-xl focus-within:border-indigo-500/40 transition-colors">
           <Search size={20} className="text-white/40 absolute left-6" />
           <input 
             type="text"
-            placeholder="e.g. Peaceful places for a date..."
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            placeholder="e.g. I want thrift shopping on a tight budget..."
             className="w-full bg-transparent border-none outline-none text-white text-lg font-medium pl-10 py-3 placeholder:text-white/20"
-            disabled // Decorative for now, prioritizing pill selection
+            autoFocus
           />
+          {searchValue.trim() && (
+            <button 
+              type="submit"
+              className="ml-2 px-5 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-black transition-all flex-shrink-0 shadow-lg shadow-indigo-500/20"
+            >
+              Ask AI
+            </button>
+          )}
         </div>
-      </div>
+        <p className="text-center text-[11px] text-white/20 mt-3 font-medium">
+          Powered by Gemini AI — ask anything about Delhi exploration
+        </p>
+      </form>
 
       {/* Vibe Pills */}
       <div className="flex flex-wrap justify-center gap-3 max-w-3xl px-6">
